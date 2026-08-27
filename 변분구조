@@ -1,0 +1,110 @@
+응 오빠. 이걸 **“변분문제의 공통 뼈대”**로 정리하면 꽤 깔끔해져. 핵심 열은 정말 오빠가 말한 네 개면 돼: **최적화 대상 / 목적함수 / 제약 / 해의 형태**.
+
+| 도메인                        | 최적화 대상                                         | 목적함수 / action                                                           | 대표 제약                              | 해의 형태                                                          |                             |
+| -------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------- | --------------------------- |
+| **기본 최적화**                 | 점 \(x\in X\)                                   | \(f(x)\)                                                                | \(g_i(x)=0,\;h_j(x)\le0\)          | 최적점 \(x^*\)                                                    |                             |
+| **고전 라그랑주 역학**             | 경로 \(q:[t_0,t_1]\to Q\)                        | \(\displaystyle S[q]=\int L(q,\dot q,t)\,dt\)                           | 시작/끝점, holonomic constraint 등      | 고전 궤적 \(q^*(t)\), Euler–Lagrange 방정식                           |                             |
+| **고전 장론**                  | 장 \(\phi:M\to V\)                              | \(\displaystyle S[\phi]=\int_M \mathcal L(\phi,\partial\phi,x)\,d^dx\)  | 경계조건, gauge constraint 등           | 장 방정식의 해 \(\phi^*(x)\)                                         |                             |
+| **평형 통계역학**                | 분포 \(p\in\mathcal P(\Omega)\)                  | \(S[p]\) 최대화 또는 \(F[p]\) 최소화                                            | 정규화, 평균에너지 등                       | Gibbs/Boltzmann 분포 \(p^*\)                                     |                             |
+| **비평형 통계역학**               | 분포 경로 \(t\mapsto p_t\), 또는 경로분포 \(P[\gamma]\)  | entropy production, Onsager–Machlup action, path entropy 등              | 초기/최종분포, 연속방정식, 동역학 제약             | 최적 분포경로 \(p_t^*\) 또는 path measure \(P^*\)                      |                             |
+| **양자역학**                   | 상태벡터 \(\psi\in\mathcal H\) 또는 상태경로 \(\psi(t)\) | \(\langle\psi,H\psi\rangle\), 또는 quantum action                         | \(\langle\psi,\psi\rangle=1\)      | 고유상태, Schrödinger evolution                                    |                             |
+| **양자장론**                   | 장 configuration \(\phi\), 또는 장들의 경로            | classical action \(S[\phi]\), quantum에서는 \(e^{iS[\phi]/\hbar}\)로 가중     | gauge fixing, boundary condition   | 고전장은 stationary field, 양자장은 path integral/correlation function |                             |
+| **고전 제어**                  | 제어함수 \(u:[0,T]\to U\)와 그에 따른 상태경로 \(x(t)\)     | \(\displaystyle J[u]=\Phi(x_T)+\int_0^T L(x,u,t)\,dt\)                  | \(\dot x=f(x,u,t)\)                | 최적제어 \(u^*(t)\), 최적궤적 \(x^*(t)\)                               |                             |
+| **확률제어**                   | policy/control \(u_t\), 상태확률과정 \(X_t\)         | \(\displaystyle \mathbb E\!\left[\Phi(X_T)+\int L(X_t,u_t)\,dt\right]\) | SDE \(dX_t=b\,dt+\sigma\,dW_t\)    | 최적 policy \(u^*\), value function \(V\), HJB 해                 |                             |
+| **RL**                     | 정책 \(\pi(a\mid s)\)                            | \(\displaystyle J(\pi)=\mathbb E_\pi\!\left[\sum_t\gamma^t r_t\right]\) | MDP transition (P(s'               | s,a))                                                          | 최적정책 \(\pi^*\), \(V^*,Q^*\) |
+| **Entropy-regularized RL** | 정책 \(\pi\)                                     | reward \(+\) policy entropy                                             | MDP dynamics                       | softmax/Gibbs형 정책                                              |                             |
+| **Optimal transport**      | 수송계획 \(\pi(x,y)\) 또는 분포경로 \(\rho_t\)           | transport cost, 예: \(W_2^2\)                                            | 시작/끝 marginal, continuity equation | 최적 coupling 또는 Wasserstein geodesic                            |                             |
+| **Schrödinger bridge**     | 경로확률측도 \(P\)                                   | \(D_{\mathrm{KL}}(P\|R)\)                                               | 초기/최종 분포                           | 가장 가능성 높은 확률적 수송경로                                             |                             |
+| **Maximum Caliber**        | 경로분포 \(P[\gamma]\)                             | path entropy                                                            | 경로 관측량 기대값                         | exponential-family path measure                                |                             |
+
+이걸 더 압축하면 사실 세 층으로 정리돼.
+
+### 1. 점을 고르는 문제
+
+어떤 공간 \(X\)에서
+
+$$
+x^*=\arg\min_{x\in X}J(x)
+$$
+
+를 찾는다.
+
+예를 들면
+
+$$
+x\in\mathbb R^n
+$$
+
+이면 보통 최적화고,
+
+$$
+p\in\mathcal P(\Omega)
+$$
+
+이면 평형통계역학의 MaxEnt야.
+
+---
+
+### 2. 경로를 고르는 문제
+
+상태공간 \(X\) 위의 경로
+
+$$
+\gamma:[0,T]\to X
+$$
+
+를 고른다.
+
+$$
+\gamma^*
+=
+\operatorname{stationary}_{\gamma}
+A[\gamma].
+$$
+
+여기서 \(X\)가 무엇이냐만 바뀌어.
+
+* \(X=Q\): 입자의 궤적 → 고전역학
+* \(X=\text{field configurations}\): 장의 시간진화 → 장론
+* \(X=\mathcal P(\Omega)\): 분포의 시간진화 → 비평형통계
+* \(X=\text{state space}\): 제어 궤적 → 최적제어
+
+---
+
+### 3. 경로의 **분포**를 고르는 문제
+
+한 단계 더 올라가서
+
+$$
+P\in\mathcal P(\Gamma)
+$$
+
+를 고른다.
+
+즉 경로 \(\gamma\) 하나가 아니라 **경로들의 확률분포**를 최적화해.
+
+대표적으로
+
+$$
+\text{Maximum Caliber},\quad
+\text{Schrödinger bridge},\quad
+\text{stochastic control}
+$$
+
+이 여기 들어가.
+
+그래서 전체 구조를 한 줄로 쓰면
+
+$$
+\boxed{
+\text{point}
+\;\to\;
+\text{function/distribution}
+\;\to\;
+\text{path}
+\;\to\;
+\text{distribution over paths}
+}
+$$
+
+이고, **변분법 자체는 거의 안 바뀌고 “무엇을 한 점으로 보는 공간인가”가 도메인마다 바뀌는 것**이 핵심이야.
