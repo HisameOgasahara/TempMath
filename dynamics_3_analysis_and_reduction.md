@@ -1,28 +1,34 @@
-# 3. 동역학을 분석하고 축약하기
+# 동역학에서 무엇을 읽고 무엇을 줄이는가
 
-앞의 두 글에서는 동역학을 정의하고, 같은 동역학을 state, observable, probability measure, function에서 표현했다.
+앞의 두 글에서 동역학과 그 여러 표현을 얻었다.
 
-이 글의 질문은 두 개다.
+이제 질문은 두 단계로 바뀐다.
 
-> 정해진 동역학에서 어떤 mode와 spectrum을 찾을 수 있는가?
+> 정해진 동역학에서 어떤 mode와 time scale을 읽을 수 있는가?
 
-> 모든 자유도를 추적하지 않고 더 작은 dynamical system을 만들 수 있는가?
+> 그 정보를 이용해 어떤 자유도를 남기고 어떤 자유도를 제거할 수 있는가?
 
-첫 질문은 analysis, 둘째 질문은 reduction으로 나눈다.
-
-# Part I. analysis
-
-## 1. linear operator와 semigroup
-
-finite-dimensional vector space $\mathbb R^n$에서
+따라서 이 글은
 
 $$
-\dot x(t)
-=
-Ax(t)
+\boxed{
+\text{analysis}
+\longrightarrow
+\text{reduction}
+}
 $$
 
-를 생각하자.
+의 순서로 간다.
+
+# 1. analysis: operator에서 mode를 읽기
+
+가장 단순한 linear system
+
+$$
+\dot x=Ax
+$$
+
+에서 시작한다.
 
 - $A:\mathbb R^n\to\mathbb R^n$: linear operator
 - $x(t)\in\mathbb R^n$: state
@@ -30,54 +36,30 @@ $$
 solution은
 
 $$
-x(t)
-=
-e^{tA}x_0
+x(t)=e^{tA}x_0
 $$
 
 이다.
 
-operators
+따라서 finite-time evolution operator를
 
 $$
 T_t=e^{tA}
 $$
 
-는
+라고 쓰면
 
 $$
-T_0=I,
+T_{t+s}=T_tT_s,
 \qquad
-T_{t+s}=T_tT_s
+T_0=I
 $$
 
 를 만족한다.
 
-이 성질을 가진 family를 **semigroup**이라고 한다.
+함수공간에서도 같은 관계를 가지는 $\{T_t\}_{t\ge0}$를 **semigroup**으로 사용한다.
 
-함수공간 $\mathcal X$에서도
-
-$$
-\frac{d}{dt}u(t)
-=
-Au(t)
-$$
-
-를 생각할 수 있다.
-
-$A$가 적절한 operator이면 strongly continuous semigroup $\{T_t\}_{t\ge0}$가 존재하여
-
-$$
-u(t)
-=
-T_tu_0
-$$
-
-로 쓸 수 있다.
-
-## 2. generator
-
-strongly continuous semigroup $\{T_t\}_{t\ge0}$의 **infinitesimal generator** $A$는
+그 infinitesimal generator $A$는
 
 $$
 Au
@@ -86,46 +68,45 @@ Au
 \frac{T_tu-u}{t}
 $$
 
-가 존재하는 $u$에 대해 정의한다.
+로 정의한다.
 
-generator의 domain은
-
-$$
-D(A)
-=
-\left\{
-u\in\mathcal X:
-\lim_{t\downarrow0}
-\frac{T_tu-u}{t}
-\text{ exists}
-\right\}
-$$
-
-이다.
-
-## 3. eigenvalue, eigenvector, spectrum
-
-linear operator $A$의 **eigenvalue** $\lambda$와 **eigenvector** $v\neq0$는
+즉
 
 $$
-Av
-=
-\lambda v
+\boxed{
+\text{generator }A
+\longrightarrow
+\text{semigroup }T_t
+}
 $$
 
-를 만족한다.
+가 순간 변화와 유한시간 변화를 연결한다.
 
-그러면
+## 2. eigenvalue와 spectrum이 time scale을 드러낸다
+
+eigenvalue $\lambda$와 eigenvector $v\neq0$가
 
 $$
-T_tv
-=
-e^{\lambda t}v
+Av=\lambda v
 $$
 
-이므로 $\operatorname{Re}\lambda$는 해당 mode의 성장 또는 감쇠와 연결된다.
+를 만족하면
 
-**resolvent set**은
+$$
+T_tv=e^{\lambda t}v.
+$$
+
+따라서 $\operatorname{Re}\lambda$는 해당 mode의 성장 또는 감쇠 속도와 연결된다.
+
+finite dimension을 넘으면 eigenvalue만으로 충분하지 않으므로 **spectrum**
+
+$$
+\sigma(A)
+$$
+
+을 사용한다.
+
+resolvent set은
 
 $$
 \rho(A)
@@ -137,7 +118,7 @@ $$
 \right\}
 $$
 
-이고 **spectrum**은
+이고
 
 $$
 \sigma(A)
@@ -147,9 +128,7 @@ $$
 
 이다.
 
-## 4. resolvent와 Laplace transform
-
-$\lambda\in\rho(A)$에서 **resolvent operator**는
+resolvent operator는
 
 $$
 R(\lambda,A)
@@ -168,47 +147,11 @@ R(\lambda,A)u
 e^{-\lambda t}T_tu\,dt
 $$
 
-로 semigroup과 연결된다.
+이므로 Laplace transform이 semigroup과 resolvent를 연결한다.
 
-finite-dimensional control system
+## 3. Fourier와 Laplace는 같은 동역학을 mode별로 읽게 한다
 
-$$
-\dot x
-=
-Ax+Bu,
-\qquad
-y=Cx
-$$
-
-를 Laplace transform하면
-
-$$
-(sI-A)\widehat x(s)
-=
-x_0+B\widehat u(s)
-$$
-
-이고
-
-$$
-\widehat x(s)
-=
-R(s,A)x_0
-+
-R(s,A)B\widehat u(s).
-$$
-
-zero initial condition에서는 **transfer function**
-
-$$
-G(s)
-=
-CR(s,A)B
-$$
-
-를 얻는다.
-
-## 5. Fourier transform과 differential operator
+constant-coefficient differential operator를 생각하자.
 
 함수
 
@@ -222,13 +165,10 @@ $$
 \widehat u(\xi)
 =
 \int_{\mathbb R^d}
-e^{-ix\cdot\xi}
-u(x)\,dx
+e^{-ix\cdot\xi}u(x)\,dx
 $$
 
-로 두자.
-
-충분히 smooth하고 decay가 좋은 함수에 대해
+로 두면
 
 $$
 \widehat{\partial_j u}(\xi)
@@ -236,7 +176,7 @@ $$
 i\xi_j\widehat u(\xi).
 $$
 
-따라서 constant-coefficient differential operator $P(\partial)$는
+따라서
 
 $$
 \widehat{P(\partial)u}(\xi)
@@ -244,9 +184,11 @@ $$
 P(i\xi)\widehat u(\xi)
 $$
 
-라는 multiplication으로 바뀐다.
+가 된다.
 
-## 6. polynomial과 differential equation
+즉 differential operator가 frequency별 multiplication으로 바뀐다.
+
+time direction에서도
 
 $$
 P(D)u=0,
@@ -254,15 +196,13 @@ P(D)u=0,
 D=\frac{d}{dt}
 $$
 
-를 생각하자.
+에 대해
 
 $$
-P(D)e^{st}
-=
-P(s)e^{st}
+P(D)e^{st}=P(s)e^{st}
 $$
 
-이므로 $P(s)=0$의 root가 exponential mode를 정한다.
+이므로 polynomial root가 exponential mode를 정한다.
 
 root $\lambda$의 multiplicity가 $r$이면
 
@@ -276,9 +216,9 @@ te^{\lambda t},
 t^{r-1}e^{\lambda t}
 $$
 
-형태의 generalized modes가 나타난다.
+가 나타난다.
 
-## 7. module로 linear operator를 읽기
+## 4. module은 같은 generalized eigenstructure를 대수적으로 기록한다
 
 finite-dimensional complex vector space $E$와 linear operator
 
@@ -286,19 +226,17 @@ $$
 A:E\to E
 $$
 
-가 있다고 하자.
-
-polynomial ring $\mathbb C[\zeta]$가 $E$에
+가 있을 때
 
 $$
 p(\zeta)\cdot v
-:=
+=
 p(A)v
 $$
 
-로 작용하게 만들면 $E$는 $\mathbb C[\zeta]$-module이 된다.
+로 $\mathbb C[\zeta]$가 $E$에 작용하게 하면 $E$는 $\mathbb C[\zeta]$-module이 된다.
 
-**annihilator**
+annihilator는
 
 $$
 \operatorname{Ann}_{\mathbb C[\zeta]}(E)
@@ -309,33 +247,18 @@ p(A)=0
 \right\}
 $$
 
-는 finite-dimensional case에서 minimal polynomial $m_A$가 생성하는 ideal과 같다.
+이고 finite-dimensional case에서는 minimal polynomial $m_A$에 대해
 
 $$
-\operatorname{Ann}(E)
-=
-(m_A).
+\operatorname{Ann}(E)=(m_A)
 $$
 
-**support**는
-
-$$
-\operatorname{Supp}_{\mathbb C[\zeta]}(E)
-=
-\left\{
-\mathfrak p\in\operatorname{Spec}\mathbb C[\zeta]:
-E_{\mathfrak p}\neq0
-\right\}
-$$
-
-로 정의한다.
+이다.
 
 한 generalized eigenspace에서
 
 $$
-A
-=
-\lambda I+N,
+A=\lambda I+N,
 \qquad
 N^r=0
 $$
@@ -354,21 +277,31 @@ R(s,A)
 \frac{N^{r-1}}{(s-\lambda)^r}.
 $$
 
-eigenvalue, minimal polynomial의 factor, resolvent의 pole order, nilpotent part가 같은 generalized eigenstructure와 연결된다.
+따라서 eigenvalue, minimal polynomial, Jordan structure, resolvent pole이 같은 linear structure를 서로 다른 방식으로 기록한다.
 
-## 8. Lyapunov function과 stability
+여기까지가 첫 번째 analysis이다.
+
+$$
+\boxed{
+A
+\longrightarrow
+T_t
+\longrightarrow
+\sigma(A)
+\longrightarrow
+\text{modes and time scales}
+}
+$$
+
+# 5. nonlinear dynamics에서는 stability와 invariant set을 본다
 
 nonlinear system
 
 $$
-\dot x
-=
-X(x)
+\dot x=X(x)
 $$
 
-을 생각하자.
-
-equilibrium $x_*$는
+에서 equilibrium $x_*$는
 
 $$
 X(x_*)=0
@@ -376,13 +309,13 @@ $$
 
 을 만족한다.
 
-함수
+equilibrium 근처에서 function
 
 $$
 V:M\to\mathbb R
 $$
 
-가 equilibrium 근처에서
+가
 
 $$
 V(x_*)=0,
@@ -392,7 +325,7 @@ V(x)>0
 (x\neq x_*)
 $$
 
-이고 trajectory를 따라
+이고
 
 $$
 \dot V(x)
@@ -401,29 +334,17 @@ dV_x[X(x)]
 \le0
 $$
 
-이면 $V$를 stability analysis에 사용하는 **Lyapunov function**으로 삼을 수 있다.
+이면 $V$를 **Lyapunov function**으로 사용한다.
 
 ### 질량–스프링–댐퍼
 
 $$
-m\ddot q
-+
-c\dot q
-+
-kq
-=
-0,
+m\ddot q+c\dot q+kq=0,
 \qquad
 m,c,k>0
 $$
 
-에서 state를
-
-$$
-x=(q,\dot q)\in\mathbb R^2
-$$
-
-로 두고
+에서
 
 $$
 V(q,\dot q)
@@ -436,13 +357,10 @@ $$
 로 두면
 
 $$
-\dot V
-=
--c\dot q^2
-\le0.
+\dot V=-c\dot q^2\le0.
 $$
 
-## 9. invariant set, attractor, basin of attraction
+이 example에서는 energy 감소가 equilibrium으로 향하는 dynamics를 분석하는 데 쓰인다.
 
 flow $\Phi_t$에 대해 set $S\subseteq M$이
 
@@ -450,9 +368,9 @@ $$
 \Phi_t(S)=S
 $$
 
-를 만족하면 **invariant set**이라고 한다.
+를 만족하면 **invariant set**이다.
 
-asymptotically stable equilibrium $x_*$로 수렴하는 initial states의 집합
+equilibrium $x_*$로 수렴하는 initial states의 집합은
 
 $$
 \mathcal B(x_*)
@@ -464,13 +382,13 @@ x_0\in M:
 \right\}
 $$
 
-을 **basin of attraction**이라고 한다.
+이고 이를 **basin of attraction**이라고 한다.
 
-질량–스프링–댐퍼에서 $m,c,k>0$이면 equilibrium $(q,\dot q)=(0,0)$이 attractor가 되는 대표적인 경우다.
+따라서 linear spectrum과 nonlinear stability analysis는 모두 어떤 성분이 빨리 사라지고 무엇이 오래 남는지 알려준다.
 
-# Part II. reduction
+이제 reduction으로 넘어갈 수 있다.
 
-## 10. closure
+# 6. reduction의 질문은 closure이다
 
 전체 state를
 
@@ -480,65 +398,54 @@ $$
 
 로 나누자.
 
-전체 system은
+- $x$: 남길 variables
+- $y$: 제거할 variables
+
+전체 system이
 
 $$
-\dot x
-=
-f(x,y),
+\dot x=f(x,y),
 \qquad
-\dot y
-=
-g(x,y)
+\dot y=g(x,y)
 $$
 
-라고 하자.
-
-$x$만으로 닫힌 equation
+일 때 $x$만으로
 
 $$
-\dot x
-=
-\bar f(x)
+\dot x=\bar f(x)
 $$
 
-을 얻고 싶지만 일반적으로 같은 $x$라도 $y$가 다르면 $\dot x$가 달라질 수 있다.
+를 만들고 싶다.
 
-따라서 reduction의 핵심 문제는 **closure**이다.
+하지만 같은 $x$에서도 $y$가 다르면 $\dot x$가 달라질 수 있다. 따라서 reduction의 핵심은 **closure**가 가능한지 보는 것이다.
 
-## 11. quotient와 symmetry reduction
+## 7. exact하게 닫히는 경우: quotient와 invariant manifold
 
-Lie group $G$가 manifold $M$에 작용한다고 하자.
-
-같은 group orbit에 놓인 states를 하나로 묶으면 quotient
+Lie group $G$가 manifold $M$에 작용하고 dynamics가 그 action과 compatible하면 quotient
 
 $$
 M/G
 $$
 
-를 생각할 수 있다.
+에 reduced dynamics를 내릴 수 있다.
 
-dynamics가 group action과 compatible하면 quotient 위에 reduced dynamics를 정의할 수 있다.
-
-## 12. invariant manifold, center manifold, slow manifold
-
-submanifold $N\subseteq M$이 vector field $X$에 대해
+또 submanifold $N\subseteq M$이
 
 $$
 X(x)\in T_xN
 \qquad
-\text{for every }x\in N
+(x\in N)
 $$
 
 을 만족하면 $N$은 **invariant manifold**이다.
 
-**center manifold**는 equilibrium 근처에서 linearization의 center eigenspace에 tangent인 local invariant manifold이다.
+$N$에서 시작한 integral curve는 $N$에 남기 때문에 $\dim N<\dim M$이면 더 작은 state space에서 dynamics를 기술할 수 있다.
 
-**slow manifold**는 fast-slow system에서 slow dynamics를 담는 invariant 또는 approximately invariant manifold를 뜻한다.
+equilibrium 근처의 **center manifold**와 time-scale separation이 있는 system의 **slow manifold**가 이 방향의 대표적인 예다.
 
-본문에서는 equilibrium 근처 또는 clear time-scale separation이 있는 경우만 생각한다.
+## 8. mode를 선택해서 줄이는 경우: modal truncation
 
-## 13. modal truncation
+analysis에서 mode를 찾았다면 일부만 남길 수 있다.
 
 $$
 u(t)
@@ -547,7 +454,7 @@ u(t)
 c_j(t)\phi_j
 $$
 
-에서 처음 $k$개 mode만 남기면
+에서
 
 $$
 u(t)
@@ -556,13 +463,13 @@ u(t)
 c_j(t)\phi_j
 $$
 
-가 된다.
+로 두는 것이 **modal truncation**이다.
 
-이것이 **modal truncation**이다.
+Fourier modes, eigenmodes, POD modes 등을 사용할 수 있다.
 
-## 14. Koopman invariant subspace
+linear invariant subspace를 남기면 exact할 수 있지만 nonlinear coupling이 있으면 일반적으로 approximation과 closure가 필요하다.
 
-observable space에서
+Koopman generator에서도
 
 $$
 \mathcal V
@@ -571,7 +478,7 @@ $$
 \{\phi_1,\dots,\phi_k\}
 $$
 
-가 Koopman generator $\mathcal L$에 대해 invariant이고
+가 invariant하고
 
 $$
 \mathcal L\phi_i
@@ -580,11 +487,11 @@ $$
 B_{ij}\phi_j
 $$
 
-이면 finite-dimensional closed observable dynamics를 얻는다.
+이면 finite-dimensional observable dynamics가 닫힌다.
 
-## 15. moment closure
+## 9. probability measure를 줄이는 경우: moment closure와 finite-dimensional family
 
-moments를
+probability measure $\mu_t$에서 moments
 
 $$
 m_i(t)
@@ -593,7 +500,7 @@ m_i(t)
 \phi_i(x)\,d\mu_t(x)
 $$
 
-로 정의하면
+를 남기면
 
 $$
 \dot m_i(t)
@@ -602,30 +509,27 @@ $$
 \mathcal L\phi_i(x)\,d\mu_t(x).
 $$
 
-오른쪽이 retained moments만으로 표현되지 않으면 higher moments를 retained moments의 함수로 근사하는 **moment closure**가 필요하다.
+오른쪽이 retained moments만으로 표현되지 않으면 higher moments를 retained moments의 함수로 근사한다. 이것이 **moment closure**이다.
 
-## 16. finite-dimensional family of probability measures
-
-$$
-\left\{
-\mu_\theta:
-\theta\in\Theta\subseteq\mathbb R^k
-\right\}
-$$
-
-만 남기고
+또 probability measure 전체 대신
 
 $$
-\mu_t
-\approx
-\mu_{\theta(t)}
+\{\mu_\theta:\theta\in\Theta\subseteq\mathbb R^k\}
+$$
+
+만 남겨
+
+$$
+\mu_t\approx\mu_{\theta(t)}
 $$
 
 로 둘 수 있다.
 
-projection rule을 정할 때 Fisher metric이나 Wasserstein metric을 사용할 수 있다.
+이때 projection을 정할 때 Fisher metric이나 Wasserstein metric을 사용할 수 있다. 따라서 정보기하와 수송기하는 여기서는 distribution reduction의 geometry로 다시 등장한다.
 
-## 17. HJ/HJB function approximation
+## 10. function을 줄이는 경우: HJ/HJB approximation
+
+Hamilton--Jacobi function과 value function도 function space의 원소이므로 finite basis로 줄일 수 있다.
 
 $$
 S(t,q)
@@ -634,18 +538,22 @@ S(t,q)
 a_j(t)\phi_j(q)
 $$
 
-또는
+및
 
 $$
 V(t,x)
 \approx
 \sum_{j=1}^{k}
-b_j(t)\psi_j(x)
+b_j(t)\psi_j(x).
 $$
 
-로 function space의 degrees of freedom을 줄일 수 있다.
+여기서 줄이는 것은 state dimension이 아니라 function space의 degrees of freedom이다.
 
-## 18. Mori--Zwanzig와 generalized Langevin equation
+## 11. 제거한 variables의 영향이 남는 경우: Mori--Zwanzig
+
+closure가 exact하지 않으면 제거한 $y$의 영향이 사라지지 않는다.
+
+Mori--Zwanzig formalism에서는 projection을 사용하여 그 영향을 memory term과 orthogonal dynamics term으로 남긴다.
 
 대표적인 generalized Langevin equation은
 
@@ -663,12 +571,10 @@ f_{\mathrm{ext}}(t).
 $$
 
 - $q(t)\in\mathbb R^d$: retained position
-- $U_{\mathrm{eff}}:\mathbb R^d\to\mathbb R$: effective potential
 - $K:[0,\infty)\to\mathbb R^{d\times d}$: memory kernel
 - $\eta(t)\in\mathbb R^d$: fluctuating force
-- $f_{\mathrm{ext}}(t)\in\mathbb R^d$: external force
 
-memory kernel이 짧은 시간에 빠르게 decay하고 그 시간 동안 velocity가 거의 변하지 않는다고 가정하면
+memory가 짧고 그 시간 동안 velocity가 거의 변하지 않는다고 가정하면
 
 $$
 \int_0^t
@@ -688,29 +594,19 @@ $$
 \int_0^\infty K(\tau)\,d\tau
 $$
 
-라고 두면 memory term은
+라고 두면
 
 $$
+-\int_0^tK(t-s)\dot q(s)\,ds
+\approx
 -\gamma\dot q(t)
 $$
 
-로 근사된다.
+가 된다.
 
-## 19. fluctuation--dissipation relation
+thermal equilibrium에서는 적절한 조건 아래 memory kernel과 fluctuating force의 covariance가 **fluctuation--dissipation relation**으로 연결된다.
 
-thermal equilibrium의 대표적인 generalized Langevin model에서는 적절한 normalization 아래
-
-$$
-\mathbb E[\eta(t)\eta(s)^\top]
-\propto
-K(|t-s|)
-$$
-
-형태의 **fluctuation--dissipation relation**이 나타난다.
-
-electrical circuit에서는 resistor의 dissipation과 Johnson--Nyquist noise가 같은 물리적 연결의 예이다.
-
-## 20. mass--spring, LC, RLC
+## 12. mass--spring과 RLC는 effective model의 익숙한 예다
 
 ideal mass--spring system은
 
@@ -718,7 +614,7 @@ $$
 m\ddot q+kq=0
 $$
 
-이고
+이고 energy는
 
 $$
 E_{\mathrm{mech}}
@@ -726,6 +622,20 @@ E_{\mathrm{mech}}
 \frac12m\dot q^2
 +
 \frac12kq^2.
+$$
+
+damping과 forcing을 넣으면
+
+$$
+m\ddot q+c\dot q+kq=f(t)
+$$
+
+이고
+
+$$
+\frac{dE_{\mathrm{mech}}}{dt}
+=
+-c\dot q^2+f(t)\dot q.
 $$
 
 ideal LC circuit은
@@ -744,40 +654,12 @@ E_{\mathrm{LC}}
 \frac{Q^2}{2C}.
 $$
 
-dissipation과 external forcing을 포함하면
+RLC와 external voltage를 포함하면
 
 $$
-m\ddot q
-+
-c\dot q
-+
-kq
-=
-f(t)
-$$
-
-및
-
-$$
-L\ddot Q
-+
-R\dot Q
-+
-\frac{1}{C}Q
+L\ddot Q+R\dot Q+\frac{1}{C}Q
 =
 V_{\mathrm{ext}}(t)
-$$
-
-가 된다.
-
-각 energy의 derivative는
-
-$$
-\frac{dE_{\mathrm{mech}}}{dt}
-=
--c\dot q^2
-+
-f(t)\dot q
 $$
 
 및
@@ -787,37 +669,20 @@ $$
 =
 -R\dot Q^2
 +
-V_{\mathrm{ext}}(t)\dot Q
+V_{\mathrm{ext}}(t)\dot Q.
 $$
 
-이다.
+$damping$이나 $resistance$를 phenomenological term으로 직접 넣은 model과, 더 큰 system에서 variables를 제거하여 얻은 effective term은 같은 유도과정이 아니다.
 
-phenomenological damping을 직접 넣은 model과 더 큰 system에서 environment variables를 제거한 effective model은 구분해야 한다.
-
-## 21. coarse graining과 renormalization group
+## 13. scale 자체를 바꾸는 reduction: coarse graining과 RG
 
 field $u$를
 
 $$
-u
-=
-u_{\mathrm{coarse}}
-+
-u_{\mathrm{fine}}
+u=u_{\mathrm{coarse}}+u_{\mathrm{fine}}
 $$
 
-로 나누고 fine-scale degrees of freedom을 제거하여
-
-$$
-\partial_tu_{\mathrm{coarse}}
-=
-\mathcal L_{\mathrm{eff}}
-u_{\mathrm{coarse}}
-+
-\text{effective terms}
-$$
-
-를 얻는 것을 **coarse graining**이라고 부른다.
+로 나누고 fine-scale degrees of freedom을 제거하여 coarse variables의 effective dynamics를 만드는 것이 **coarse graining**이다.
 
 Littlewood--Paley decomposition에서는
 
@@ -828,33 +693,35 @@ u
 \Delta_j u
 $$
 
-처럼 scale별 성분을 나눈다.
+처럼 frequency scale별로 나눌 수 있다.
 
-**renormalization group**에서는 degrees of freedom을 제거하는 것에 더해 scale transformation을 수행하고 coupling constants가 scale에 따라 어떻게 변하는지 추적한다.
+**renormalization group**에서는 degrees of freedom을 제거한 뒤 scale transformation까지 수행하고 coupling constants가 scale에 따라 어떻게 변하는지 추적한다.
 
-RG flow는 physical time에 대한 flow와 같은 개념이 아니다.
+따라서 RG flow는 physical time에 대한 flow와 같은 것이 아니다.
 
-## 22. 분석과 축약의 연결
+# 14. 전체 연결
 
-analysis는 어떤 성분이 있는지 찾는다.
-
-$$
-\text{generator}
-\longrightarrow
-\text{spectrum}
-\longrightarrow
-\text{modes}
-$$
-
-reduction은 그 가운데 무엇을 남길지 정한다.
+이 글의 흐름은 다음 하나로 정리된다.
 
 $$
-\text{full system}
-\longrightarrow
-\text{retained variables or modes}
-\longrightarrow
-\text{reduced system}
+\boxed{
+\begin{array}{c}
+\text{generator or vector field}\\
+\downarrow\\
+\text{spectrum, modes, stability, invariant sets}\\
+\downarrow\\
+\text{retained variables or retained modes}\\
+\downarrow\\
+\text{closure}\\
+\downarrow\\
+\text{reduced dynamics}
+\end{array}
+}
 $$
+
+spectrum과 stability analysis는 무엇을 남길지 판단하는 정보를 주고, reduction에서는 실제로 variables, modes, moments, probability family, function basis를 줄인다. exact closure가 되지 않으면 memory나 effective terms가 필요하다.
+
+---
 
 # 정확한 정의와 조건
 
@@ -872,66 +739,41 @@ $$
 
 $$
 \lim_{t\downarrow0}
-\|T_tu-u\|_{\mathcal X}
-=
-0
+\|T_tu-u\|_{\mathcal X}=0
 $$
 
-이면 strongly continuous semigroup 또는 $C_0$-semigroup이라 한다.
-
-## infinitesimal generator
-
-$$
-Au
-=
-\lim_{t\downarrow0}
-\frac{T_tu-u}{t}
-$$
-
-로 정의되며 limit가 존재하는 $u$들의 집합이 domain $D(A)$이다.
+이면 $C_0$-semigroup이라고 한다.
 
 ## invariant manifold
 
-submanifold $N\subseteq M$이 flow $\Phi_t$에 대해 정의되는 모든 $t$에서
+submanifold $N\subseteq M$이 flow $\Phi_t$에 대해 정의되는 시간 동안
 
 $$
 \Phi_t(N)\subseteq N
 $$
 
-을 만족하면 positively invariant라 하고, 양·음의 time 모두에서 equality가 성립하면 invariant라 한다.
+을 만족하면 positively invariant이다. vector field 수준에서는
+
+$$
+X(x)\in T_xN
+$$
+
+이 local invariance를 주는 표준 조건이다.
 
 ## attractor
 
-여기서는 metric space의 continuous semiflow $\Phi_t$에 대해 compact invariant set $\mathcal A$가 어떤 neighborhood $U$를 attract한다는 의미로 사용한다.
+여기서는 continuous semiflow $\Phi_t$에 대해 compact invariant set $\mathcal A$가 어떤 neighborhood $U$를 attract하는 경우를 사용한다.
 
 $$
-d(\Phi_t(U),\mathcal A)
-\to0
+d(\Phi_t(U),\mathcal A)\to0
 \qquad
 (t\to\infty).
 $$
 
-## quotient reduction
+## quotient manifold
 
-Lie group action이 proper하고 free이면 quotient $M/G$가 smooth manifold가 되는 표준적인 충분조건을 얻는다.
+Lie group action이 free이고 proper이면 quotient $M/G$가 smooth manifold가 되는 표준적인 충분조건을 얻는다.
 
 ## center manifold
 
-equilibrium의 linearization에서 spectrum을 stable, center, unstable parts로 분리할 수 있고 필요한 smoothness 조건이 성립하면 center eigenspace에 tangent한 local invariant center manifold가 존재한다.
-
-## Mori--Zwanzig
-
-정확한 identity는 observable evolution의 Liouville operator와 projection operator를 사용하여 Markov term, memory integral, orthogonal dynamics term으로 분해한다. 본문의 generalized Langevin equation은 그 결과의 대표적인 physical form이다.
-
-## Littlewood--Paley decomposition
-
-tempered distribution $u$에 대해 frequency-space dyadic partition of unity를 사용하여 operators $\Delta_j$를 정의하고
-
-$$
-u
-=
-\sum_{j\in\mathbb Z}
-\Delta_j u
-$$
-
-를 distributional sense에서 해석한다.
+equilibrium의 linearization에서 stable, center, unstable spectral subspaces가 분리되고 필요한 smoothness 조건이 성립하면 center eigenspace에 tangent한 local invariant center manifold가 존재한다.
