@@ -128,9 +128,7 @@ e^2(v)=5.
 
 $e_1,e_2$를 기저라고 하고, $e^1,e^2$를 그 기저에 대한 **dual basis**라고 한다.
 
-### 1.2 기호로 일반화
-
-$V$를 유한차원 벡터공간, $\{e_i\}$를 기저, $\{e^i\}$를 dual basis라고 하면
+방금 수치 예시에서 본 대응을 일반적인 유한차원 벡터공간 $V$에 그대로 쓰면, $\{e_i\}$를 기저, $\{e^i\}$를 dual basis라 할 때
 
 ```math
 e^i(e_j)=\delta^i{}_j,
@@ -147,17 +145,15 @@ e^i(e_j)=\delta^i{}_j,
 \end{cases}
 ```
 
-모든 $v\in V$는
+따라서 방금 본 수치 분해의 일반식은
 
 ```math
 v=\sum_i e^i(v)e_i
 ```
 
-로 복원된다.
+이다. 즉 dual basis의 역할은 **기저에 대한 좌표를 추출하는 것**이다.
 
-즉 dual basis의 역할은 **기저에 대한 좌표를 추출하는 것**이다.
-
-### 1.3 identity와 Kronecker delta
+### 1.2 identity와 Kronecker delta
 
 수치적으로
 
@@ -200,7 +196,7 @@ I:V\to V
 
 ---
 
-### 1.4 함수공간에서는 위치가 연속 index가 된다
+### 1.3 함수공간에서는 위치가 연속 index가 된다
 
 이번에는 함수
 
@@ -254,7 +250,7 @@ e^j\longleftrightarrow \delta_y
 
 여기서 $j$는 이산 index이고 $y$는 연속 index이다.
 
-### 1.5 Dirac delta와 distribution
+### 1.4 Dirac delta와 distribution
 
 유한차원에서는 $e^j\in V^*$가 평범한 선형범함수였지만, 연속 index를 다룰 때 등장하는 $\delta_y$는 일반적인 함수가 아니다.
 
