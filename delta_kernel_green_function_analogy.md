@@ -1,47 +1,114 @@
 https://chatgpt.com/share/6aa1e958-b4e4-83ee-ac11-cb276f301a7d?ogimg=plain
 
-오빠, 이건 **유한차원 선형대수에서 실제 계수로 시작해서, 왜 델타–그린함수–컨볼루션–약해 이론이 필요한지** 순서대로 보면 제일 자연스러워.
+# 유한차원 선형대수에서 함수공간의 kernel, Green function, distribution까지
 
-### 1. 유한차원: 벡터를 기저계수로 복원
+이 글의 목적은 함수공간에서 등장하는 kernel, Dirac delta, Green function, convolution, distribution을 처음부터 별개의 개념으로 배우는 것이 아니다.
 
-먼저 $V=\mathbb R^2$라는 벡터공간과 표준기저
+각 개념마다 다음 순서를 반복한다.
+
+1. 유한차원에서 실제 숫자로 계산한다.
+2. 그 계산의 각 숫자와 벡터가 어떤 기호에 해당하는지 표시한다.
+3. 같은 구조를 함수공간으로 옮긴다.
+4. 함수공간에서 필요한 정의와 기호를 적는다.
+
+이미 한 번 연결한 기호는 뒤에서 같은 설명을 반복하지 않는다.
+
+---
+
+## 1. 좌표를 뽑고 다시 복원하기: dual basis에서 Dirac delta까지
+
+### 1.1 수치 예시
+
+벡터
 
 $$
-e_1=
 \begin{pmatrix}
-1\\0
-\end{pmatrix},
-\qquad
-e_2=
-\begin{pmatrix}
-0\\1
-\end{pmatrix}
-$$
-
-를 잡자. 벡터
-
-$$
-v=
-\begin{pmatrix}
-3\\5
+3\\
+5
 \end{pmatrix}
 $$
 
 는
 
 $$
-v=3e_1+5e_2
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix}
+=
+3
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
++
+5
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
 $$
 
-로 쓸 수 있어.
+로 쓸 수 있다.
 
-그런데 $3,5$를 어떻게 뽑느냐가 중요해. 쌍대공간 $V^\ast$의 쌍대기저
+여기서
 
 $$
-e^1,e^2:V\to\mathbb R
+e_1=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix},
+\qquad
+e_2=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
 $$
 
-를
+라고 이름을 붙이고, 벡터를
+
+$$
+v=
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix}
+$$
+
+라고 하자.
+
+그러면 위 계산은
+
+$$
+\underbrace{
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix}
+}_{v}
+=
+\underbrace{3}_{e^1(v)}
+\underbrace{
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+}_{e_1}
++
+\underbrace{5}_{e^2(v)}
+\underbrace{
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+}_{e_2}
+$$
+
+라고 쓸 수 있다.
+
+여기서
 
 $$
 e^1(x_1,x_2)=x_1,
@@ -49,124 +116,240 @@ e^1(x_1,x_2)=x_1,
 e^2(x_1,x_2)=x_2
 $$
 
-로 정의하면
+는 각각 첫 번째 성분과 두 번째 성분을 뽑는 선형사상이다.
+
+즉
 
 $$
-e^i(e_j)=\delta^i{}_j
+e^1(v)=3,
+\qquad
+e^2(v)=5.
 $$
 
-이고
+$e_1,e_2$를 기저라고 하고, $e^1,e^2$를 그 기저에 대한 **dual basis**라고 한다.
+
+### 1.2 기호로 일반화
+
+$V$를 유한차원 벡터공간, $\{e_i\}$를 기저, $\{e^i\}$를 dual basis라고 하면
 
 $$
-v=e^1(v)e_1+e^2(v)e_2.
+e^i(e_j)=\delta^i{}_j,
 $$
 
-즉 구조는
+여기서 $\delta^i{}_j$는 Kronecker delta이다.
 
 $$
-\boxed{
-v=\sum_i (\text{coefficient extractor})_i(v)\,e_i
-}
+\delta^i{}_j
+=
+\begin{cases}
+1,&i=j,\\
+0,&i\neq j.
+\end{cases}
 $$
 
-야.
+모든 $v\in V$는
+
+$$
+v=\sum_i e^i(v)e_i
+$$
+
+로 복원된다.
+
+즉 dual basis의 역할은 **기저에 대한 좌표를 추출하는 것**이다.
+
+### 1.3 identity와 Kronecker delta
+
+수치적으로
+
+$$
+I=
+\begin{pmatrix}
+1&0\\
+0&1
+\end{pmatrix}
+$$
+
+이면
+
+$$
+I
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix}
+=
+\begin{pmatrix}
+3\\
+5
+\end{pmatrix}.
+$$
+
+성분으로 쓰면
+
+$$
+v_i=\sum_j\delta_{ij}v_j.
+$$
+
+따라서 Kronecker delta는 identity map
+
+$$
+I:V\to V
+$$
+
+의 행렬성분이다.
 
 ---
 
-### 2. 연속공간에서는 계수가 무한히 많다
+### 1.4 함수공간에서는 위치가 연속 index가 된다
 
-이제 벡터 대신 함수
-
-$$
-f:\mathbb R\to\mathbb R
-$$
-
-를 생각하자.
-
-유한차원에서는 $i=1,2,\dots,n$이라는 이산 index가 있었지만, 함수에서는 index가 $x\in\mathbb R$라는 **연속변수**가 돼.
-
-유한차원의
+이번에는 함수
 
 $$
-e^i(v)=v_i
+f:\mathbb R\to\mathbb R,
+\qquad
+f(x)=x^2+1
 $$
 
-에 대응해서 함수에서는
+을 생각하자.
+
+$x=2$에서 함수값은
 
 $$
-\delta_x(f)=f(x)
+f(2)=5.
 $$
 
-라는 평가범함수
+이 연산 자체를
 
 $$
-\delta_x:\mathcal D(\mathbb R)\to\mathbb R
+\delta_2(f)=f(2)=5
 $$
 
-를 사용해.
+라고 쓸 수 있다.
 
-그러면 형식적으로
-
-$$
-f(x)=\int_{\mathbb R}\delta(x-y)f(y)\,dy.
-$$
-
-유한차원의
+유한차원에서
 
 $$
-v_i=\sum_j \delta_{ij}v_j
+e^j(v)=v_j
 $$
 
-가 연속 index에서는
+가 $j$번째 좌표를 추출했다면, 함수공간에서는
 
 $$
-f(x)=\int \delta(x-y)f(y)\,dy
+\delta_y(f)=f(y)
 $$
 
-로 바뀐 거야.
+가 위치 $y$의 값을 추출한다.
+
+즉 처음 한 번만 대응을 적으면
 
 $$
 \boxed{
+j\longleftrightarrow y,
+\qquad
+e^j\longleftrightarrow \delta_y
+}
+$$
+
+이다.
+
+여기서 $j$는 이산 index이고 $y$는 연속 index이다.
+
+### 1.5 Dirac delta와 distribution
+
+유한차원에서는 $e^j\in V^*$가 평범한 선형범함수였지만, 연속 index를 다룰 때 등장하는 $\delta_y$는 일반적인 함수가 아니다.
+
+시험함수 공간을
+
+$$
+\mathcal D(\Omega)=C_c^\infty(\Omega)
+$$
+
+라고 하자.
+
+Dirac distribution은 연속선형범함수
+
+$$
+\delta_y:\mathcal D(\Omega)\to\mathbb R
+$$
+
+로 정의되고,
+
+$$
+\langle\delta_y,\varphi\rangle=\varphi(y)
+$$
+
+를 만족한다.
+
+$\mathcal D(\Omega)$ 위의 연속선형범함수들의 공간
+
+$$
+\mathcal D'(\Omega)
+$$
+
+를 **distribution space**라고 한다.
+
+따라서
+
+$$
+\delta_y\in\mathcal D'(\Omega).
+$$
+
+identity의 유한차원 표현
+
+$$
+v_i=\sum_j\delta_{ij}v_j
+$$
+
+은 연속 index에서는 형식적으로
+
+$$
+f(x)
+=
+\int_{\mathbb R}
+\delta(x-y)f(y)\,dy
+$$
+
+가 된다.
+
+여기서
+
+$$
 \delta_{ij}
-\quad\longrightarrow\quad
-\delta(x-y)
-}
+\longleftrightarrow
+\delta(x-y),
+\qquad
+\sum_j
+\longleftrightarrow
+\int dy
 $$
 
-이게 첫 번째 핵심 유비야.
+라는 대응이 생긴다.
 
 ---
 
-### 3. 행렬도 같은 방식으로 함수 연산자로 확장된다
+## 2. 행렬에서 kernel로
 
-유한차원 선형사상
+### 2.1 수치 예시
 
-$$
-A:\mathbb R^2\to\mathbb R^2
-$$
-
-를
+행렬
 
 $$
 A=
 \begin{pmatrix}
 2&1\\
 4&3
-\end{pmatrix}
-$$
-
-라고 하자.
-
-그러면
-
-$$
+\end{pmatrix},
+\qquad
 v=
 \begin{pmatrix}
-3\\5
+3\\
+5
 \end{pmatrix}
 $$
 
-에 대해
+를 생각하자.
+
+그러면
 
 $$
 Av
@@ -174,45 +357,131 @@ Av
 \begin{pmatrix}
 2\cdot3+1\cdot5\\
 4\cdot3+3\cdot5
+\end{pmatrix}
+=
+\begin{pmatrix}
+11\\
+27
 \end{pmatrix}.
 $$
 
-성분으로 쓰면
+첫 번째 출력 성분만 보면
+
+$$
+11
+=
+\underbrace{2}_{A_{11}}
+\underbrace{3}_{v_1}
++
+\underbrace{1}_{A_{12}}
+\underbrace{5}_{v_2}.
+$$
+
+두 번째 출력 성분은
+
+$$
+27
+=
+\underbrace{4}_{A_{21}}
+\underbrace{3}_{v_1}
++
+\underbrace{3}_{A_{22}}
+\underbrace{5}_{v_2}.
+$$
+
+따라서 일반적으로
 
 $$
 (Av)_i=\sum_j A_{ij}v_j.
 $$
 
-함수공간에서는 합이 적분으로 바뀌어서, 선형연산자
-
-$$
-T:X\to Y
-$$
-
-를
-
-$$
-(Tf)(x)
-=
-\int_{\mathbb R}K(x,y)f(y)\,dy
-$$
-
-처럼 표현해.
-
 여기서
 
+- $j$는 입력 좌표의 index,
+- $i$는 출력 좌표의 index,
+- $A_{ij}$는 입력의 $j$번째 성분이 출력의 $i$번째 성분에 기여하는 계수이다.
+
+### 2.2 행렬의 열
+
+기저벡터를 하나씩 넣으면
+
 $$
-K:\mathbb R\times\mathbb R\to\mathbb R
+Ae_1
+=
+A
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\begin{pmatrix}
+2\\
+4
+\end{pmatrix},
 $$
 
-는 **행렬 $A_{ij}$의 연속버전인 kernel**이야.
+$$
+Ae_2
+=
+A
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+1\\
+3
+\end{pmatrix}.
+$$
+
+즉
+
+$$
+\underbrace{Ae_1}_{\text{첫 번째 열}}
+=
+\begin{pmatrix}
+\underbrace{2}_{e^1(Ae_1)=A_{11}}\\
+\underbrace{4}_{e^2(Ae_1)=A_{21}}
+\end{pmatrix}.
+$$
 
 따라서
 
 $$
+A_{ij}=e^i(Ae_j).
+$$
+
+행렬 전체는 각 기저입력 $e_j$에 대한 반응 $Ae_j$를 모은 것이다.
+
+---
+
+### 2.3 함수공간으로 옮기기
+
+함수공간에서 입력 index $j$가 연속변수 $y$가 되고 출력 index $i$가 연속변수 $x$가 되면, 행렬성분 $A_{ij}$에 대응하는 것이 두 변수의 함수 또는 distribution인 kernel
+
+$$
+K(x,y)
+$$
+
+이다.
+
+적분 kernel로 표현되는 선형연산자 $T$는
+
+$$
+(Tf)(x)
+=
+\int K(x,y)f(y)\,dy
+$$
+
+로 작용한다.
+
+앞 절의 대응을 그대로 사용하면
+
+$$
 \boxed{
 A_{ij}
-\quad\longrightarrow\quad
+\longleftrightarrow
 K(x,y)
 }
 $$
@@ -220,178 +489,382 @@ $$
 이고,
 
 $$
-\boxed{
 (Av)_i=\sum_jA_{ij}v_j
-\quad\longrightarrow\quad
-(Tf)(x)=\int K(x,y)f(y)\,dy
-}
 $$
 
-가 돼.
-
----
-
-### 4. 그렇다면 kernel의 각 열을 알면 연산자 전체를 안다
-
-행렬에서
+가
 
 $$
-Ae_j
+(Tf)(x)
+=
+\int K(x,y)f(y)\,dy
 $$
 
-를 계산하면 $A$의 $j$번째 열이 나오지.
+로 바뀐다.
 
-예를 들어
-
-$$
-Ae_1=
-\begin{pmatrix}
-2\\4
-\end{pmatrix},
-\qquad
-Ae_2=
-\begin{pmatrix}
-1\\3
-\end{pmatrix}.
-$$
-
-따라서 기저 각각에 대한 반응만 알면 $A$ 전체를 알 수 있어.
-
-함수공간에서 $e_j$ 역할을 하는 것이 $\delta_y$야.
-
-그래서
+또 행렬의 $j$번째 열이 $Ae_j$였으므로, 함수공간에서는 점입력 $\delta_y$에 대한 반응
 
 $$
 T\delta_y
 $$
 
-를 계산하면 kernel의 $y$번째 “열”이 나오고,
+가 kernel의 $y$에 해당하는 열 역할을 한다.
+
+형식적으로
 
 $$
-K(x,y)=(T\delta_y)(x)
+K(x,y)=(T\delta_y)(x).
 $$
 
-라고 볼 수 있어.
-
-즉
-
-$$
-\boxed{
-Ae_j
-\quad\longrightarrow\quad
-T\delta_y
-}
-$$
-
-야.
-
-이게 왜 중요한가 하면, **복잡한 임의 입력을 전부 시험할 필요 없이 점입력에 대한 반응만 알면 연산자 전체를 복원할 수 있기 때문**이야.
+따라서 **kernel은 행렬을 연속 index로 확장한 것**이고, $K(\cdot,y)$는 행렬의 한 열에 대응한다.
 
 ---
 
-### 5. 이제 미분방정식도 행렬방정식처럼 본다
+## 3. 역행렬에서 Green matrix와 Green function으로
 
-유한차원에서
+### 3.1 수치 예시
 
-$$
-Au=b
-$$
-
-를 푼다고 하자.
-
-$A$가 가역이면
-
-$$
-u=A^{-1}b.
-$$
-
-그리고
-
-$$
-A^{-1}_{ij}
-$$
-
-를 알면
-
-$$
-u_i=\sum_jA^{-1}_{ij}b_j.
-$$
-
-PDE에서도 똑같이 미분연산자
-
-$$
-L:D(L)\subset X\to Y
-$$
-
-를 잡고
+선형방정식
 
 $$
 Lu=f
 $$
 
-를 푸는 문제로 본다.
+를 생각하자.
 
-형식적으로
-
-$$
-u=L^{-1}f.
-$$
-
-그러면 $L^{-1}$의 kernel을 $G(x,y)$라고 해서
+구체적으로
 
 $$
-u(x)=\int G(x,y)f(y)\,dy.
+L=
+\begin{pmatrix}
+2&1\\
+1&1
+\end{pmatrix}
 $$
 
-이 $G$가 Green function/kernel이야.
+를 잡으면
+
+$$
+L^{-1}
+=
+\begin{pmatrix}
+1&-1\\
+-1&2
+\end{pmatrix}.
+$$
+
+예를 들어
+
+$$
+f=
+\begin{pmatrix}
+7\\
+4
+\end{pmatrix}
+$$
+
+이면
+
+$$
+u
+=
+L^{-1}f
+=
+\begin{pmatrix}
+1&-1\\
+-1&2
+\end{pmatrix}
+\begin{pmatrix}
+7\\
+4
+\end{pmatrix}
+=
+\begin{pmatrix}
+3\\
+1
+\end{pmatrix}.
+$$
+
+실제로
+
+$$
+L
+\begin{pmatrix}
+3\\
+1
+\end{pmatrix}
+=
+\begin{pmatrix}
+7\\
+4
+\end{pmatrix}.
+$$
+
+### 3.2 Green matrix
+
+$L^{-1}$의 열을 하나씩 보자.
+
+$$
+L^{-1}e_1
+=
+\begin{pmatrix}
+1\\
+-1
+\end{pmatrix},
+\qquad
+L^{-1}e_2
+=
+\begin{pmatrix}
+-1\\
+2
+\end{pmatrix}.
+$$
+
+첫 번째 열은
+
+$$
+L
+\begin{pmatrix}
+1\\
+-1
+\end{pmatrix}
+=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=e_1
+$$
+
+을 만족하고, 두 번째 열은
+
+$$
+L
+\begin{pmatrix}
+-1\\
+2
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=e_2
+$$
+
+를 만족한다.
+
+$G=L^{-1}$라고 쓰면
+
+$$
+LG=I
+$$
+
+이고, 열별로
+
+$$
+LG_{\cdot j}=e_j.
+$$
+
+이 $G$를 유한차원에서 **Green matrix**라고 볼 수 있다.
+
+핵심은 각 열 $G_{\cdot j}$가 **단위입력 $e_j$를 만들기 위한 해**라는 점이다.
 
 ---
 
-### 6. 왜 Green function은 delta를 넣어서 정의하나
+### 3.3 함수공간의 Green function
 
-행렬에서 inverse matrix의 $j$번째 열은
-
-$$
-A^{-1}e_j
-$$
-
-야.
-
-왜냐하면
+이제 미분연산자
 
 $$
-A(A^{-1}e_j)=e_j.
+L:D(L)\subset X\to Y
 $$
 
-똑같이 함수공간에서는
+에 대해
 
 $$
-G(\cdot,y):=L^{-1}\delta_y
+Lu=f
 $$
 
-로 정의하니까
+를 푼다고 하자.
+
+역연산자 $L^{-1}$가 적절히 존재하고 kernel로 표현될 수 있다면
 
 $$
-L_xG(x,y)=\delta(x-y).
+u=L^{-1}f
 $$
+
+이고,
+
+$$
+u(x)
+=
+\int G(x,y)f(y)\,dy.
+$$
+
+여기서 $G(x,y)$가 $L^{-1}$의 kernel인 **Green function**이다.
+
+유한차원에서
+
+$$
+LG_{\cdot j}=e_j
+$$
+
+였으므로 연속 index에서는
+
+$$
+G(\cdot,y)=L^{-1}\delta_y
+$$
+
+이고,
+
+$$
+L_xG(x,y)=\delta(x-y)
+$$
+
+가 된다.
+
+즉 Green function은 별개의 신비한 함수가 아니라 **inverse operator의 kernel**이며,
+
+$$
+G(\cdot,y)
+$$
+
+는 역행렬의 한 열 $G_{\cdot j}$에 대응한다.
+
+---
+
+## 4. 차이에만 의존하는 행렬에서 convolution으로
+
+### 4.1 수치 예시: 같은 상대위치에는 같은 계수
+
+이번에는
+
+$$
+A=
+\begin{pmatrix}
+2&1&3\\
+3&2&1\\
+1&3&2
+\end{pmatrix},
+\qquad
+v=
+\begin{pmatrix}
+1\\
+2\\
+4
+\end{pmatrix}
+$$
+
+를 생각하자.
+
+그러면
+
+$$
+Av
+=
+\begin{pmatrix}
+2\cdot1+1\cdot2+3\cdot4\\
+3\cdot1+2\cdot2+1\cdot4\\
+1\cdot1+3\cdot2+2\cdot4
+\end{pmatrix}
+=
+\begin{pmatrix}
+16\\
+11\\
+15
+\end{pmatrix}.
+$$
+
+이 행렬에서는 계수가 절대적인 $i,j$ 각각보다 두 index의 상대적 차이에 의해 반복된다. 주기적 index를 사용하면
+
+$$
+A_{ij}=a_{i-j\;\mathrm{mod}\;3}
+$$
+
+꼴이다.
 
 따라서
 
 $$
+(Av)_i
+=
+\sum_j a_{i-j}v_j.
+$$
+
+이 식은 유한한 주기 격자에서의 **discrete convolution**이다.
+
+### 4.2 함수공간으로 옮기기
+
+함수공간에서도 kernel이 두 위치 $x,y$ 각각에 독립적으로 의존하지 않고 차이
+
+$$
+x-y
+$$
+
+에만 의존한다고 하자.
+
+즉
+
+$$
+K(x,y)=k(x-y).
+$$
+
+그러면
+
+$$
+(Tf)(x)
+=
+\int k(x-y)f(y)\,dy.
+$$
+
+오른쪽을 convolution으로 정의하면
+
+$$
+(k*f)(x)
+=
+\int k(x-y)f(y)\,dy
+$$
+
+이므로
+
+$$
+Tf=k*f.
+$$
+
+이 구조가 나타나는 대표적인 조건이 translation invariance이다.
+
+평행이동 연산자
+
+$$
+\tau_a f(x)=f(x-a)
+$$
+
+에 대해
+
+$$
+T\tau_a=\tau_aT
+$$
+
+가 성립하면, 적절한 조건 아래 kernel이 $x-y$에만 의존하는 convolution kernel로 나타난다.
+
+즉
+
+$$
 \boxed{
-A^{-1}e_j
-\quad\longrightarrow\quad
-G(\cdot,y)=L^{-1}\delta_y
+\text{general kernel }K(x,y)
+\xrightarrow{\text{translation invariance}}
+k(x-y)
+\xrightarrow{}
+\text{convolution}
 }
 $$
 
-야.
-
-Green function이 신비한 별도 개념이 아니라 그냥 **inverse operator의 matrix column**이라고 보면 돼.
+이다.
 
 ---
 
-### 7. 계단함수는 가장 단순한 Green function 예다
+## 5. 가장 단순한 Green function: 미분연산자와 Heaviside 함수
 
 미분연산자
 
@@ -401,47 +874,50 @@ $$
 
 를 생각하자.
 
-우리는
+문제는
 
 $$
 Du=f
 $$
 
-를 풀고 싶어.
+를 푸는 것이다.
 
-행렬식 사고방식대로 $D^{-1}$의 kernel을 찾으려면
-
-$$
-DH=\delta
-$$
-
-를 만족하는 $H$를 찾으면 돼.
-
-그게 Heaviside 함수
+앞 절의 Green function 정의에 따르면 $D^{-1}$의 kernel $G$는
 
 $$
-H(t)=
+DG=\delta
+$$
+
+를 만족해야 한다.
+
+Heaviside 함수
+
+$$
+H(t)
+=
 \begin{cases}
 0,&t<0,\\
 1,&t>0
 \end{cases}
 $$
 
-야.
+는 고전적인 의미에서는 $t=0$에서 미분할 수 없다.
 
-초함수 의미에서
+그러나 distributional derivative를 사용하면
 
 $$
 DH=\delta.
 $$
 
-그래서
+따라서 $H$가 $D^{-1}$의 Green function 역할을 한다.
+
+실제로
 
 $$
 u=H*f
 $$
 
-이면
+라고 두면
 
 $$
 D(H*f)
@@ -453,129 +929,53 @@ D(H*f)
 f.
 $$
 
-즉 $H$는 $D^{-1}$의 kernel 역할을 해.
+즉
+
+$$
+Du=f.
+$$
+
+여기서 distribution이 필요한 이유가 다시 나타난다. Green function을 다루기 위해서는 $\delta$뿐 아니라 고전적으로 미분할 수 없는 $H$의 미분도 다룰 수 있어야 한다.
 
 ---
 
-### 8. 왜 convolution이 등장하는가
+## 6. distribution에서 미분을 정의하기
 
-일반 kernel은
-
-$$
-K(x,y)
-$$
-
-처럼 두 위치에 따로 의존해.
-
-그런데 시스템이 translation invariant라면
+함수 $f$가 충분히 매끄럽고 시험함수 $\varphi\in C_c^\infty(\Omega)$라면 부분적분으로
 
 $$
-T\tau_a=\tau_aT
-$$
-
-를 만족해.
-
-여기서
-
-$$
-\tau_a f(x)=f(x-a)
-$$
-
-는 평행이동 작용
-
-$$
-\tau_a:X\to X
-$$
-
-이야.
-
-이 조건에서는 kernel이 절대위치 $x,y$ 각각이 아니라 차이
-
-$$
-x-y
-$$
-
-에만 의존해서
-
-$$
-K(x,y)=k(x-y)
-$$
-
-가 돼.
-
-그러면
-
-$$
-(Tf)(x)
+\int f'(x)\varphi(x)\,dx
 =
-\int k(x-y)f(y)\,dy
+-
+\int f(x)\varphi'(x)\,dx
+$$
+
+를 얻는다.
+
+distribution에서는 이 식의 오른쪽을 미분의 정의로 사용한다.
+
+$T\in\mathcal D'(\Omega)$의 distributional derivative $DT\in\mathcal D'(\Omega)$를
+
+$$
+\langle DT,\varphi\rangle
 =
-(k*f)(x).
+-
+\langle T,D\varphi\rangle
 $$
 
-즉 convolution은 그냥 **translation symmetry가 있는 kernel operator**야.
+로 정의한다.
+
+이 정의 때문에 고전적 미분이 존재하지 않는 Heaviside 함수도
 
 $$
-\boxed{
-\text{general kernel}
-\quad\xrightarrow{\text{translation symmetry}}\quad
-\text{convolution kernel}
-}
+DH=\delta
 $$
+
+라는 의미를 갖는다.
 
 ---
 
-### 9. 군으로 확장하면 같은 구조가 유지된다
-
-$\mathbb R^n$의 평행이동만 볼 필요는 없어.
-
-국소콤팩트 군 $G$와 Haar 측도 $dg$를 잡으면 함수
-
-$$
-f,k:G\to\mathbb C
-$$
-
-에 대해
-
-$$
-(f*k)(x)
-=
-\int_G f(g)k(g^{-1}x)\,dg
-$$
-
-를 정의할 수 있어.
-
-즉 convolution은 본질적으로
-
-$$
-x-y
-$$
-
-가 아니라 군의 상대변위
-
-$$
-g^{-1}x
-$$
-
-를 사용하는 구조야.
-
-그래서
-
-$$
-\boxed{
-\mathbb R^n\text{-translation}
-\quad\longrightarrow\quad
-G\text{-action}
-}
-$$
-
-으로 일반화된다.
-
----
-
-### 10. 마지막 문제가 생긴다: $L^{-1}$가 항상 좋은 함수는 아니다
-
-여기서 함수해석이 필요한 이유가 생겨.
+## 7. 고전해에서 weak solution으로
 
 미분연산자
 
@@ -583,67 +983,25 @@ $$
 L:D(L)\subset X\to Y
 $$
 
-는 보통 bounded operator가 아니고, $L^{-1}$도 항상 모든 $f$에 대해 존재하지 않아.
+는 일반적으로 모든 함수에 정의되는 bounded operator가 아니다.
 
-더 심하게는
-
-$$
-L G=\delta
-$$
-
-에서 오른쪽 $\delta$ 자체가 보통 함수가 아니야.
-
-그래서 공간을
+또
 
 $$
-C^\infty
+LG=\delta
 $$
 
-같은 고전적 함수공간에만 두면 Green function조차 표현하지 못하는 경우가 생겨.
+에서 오른쪽의 $\delta$도 일반적인 함수가 아니다.
 
-그래서
-
-$$
-\mathcal D(\Omega)=C_c^\infty(\Omega)
-$$
-
-의 연속쌍대공간
+따라서 미분방정식을 항상 점별 등식
 
 $$
-\mathcal D'(\Omega)
+Lu(x)=f(x)
 $$
 
-인 distribution space로 확장해.
+으로 요구하면 다룰 수 있는 해가 너무 제한된다.
 
-이제
-
-$$
-\delta\in\mathcal D'(\Omega)
-$$
-
-이고 미분도
-
-$$
-\langle D T,\varphi\rangle
-=
--\langle T,D\varphi\rangle
-$$
-
-로 정의 가능해.
-
----
-
-### 11. 그러면 weak solution이 자연스럽게 나온다
-
-고전해에서는
-
-$$
-Lu=f
-$$
-
-가 점마다 성립해야 해.
-
-하지만 초함수/함수해석에서는 시험함수 $\varphi$에 대해
+distribution의 언어에서는 시험함수 $\varphi$에 대해
 
 $$
 \langle Lu,\varphi\rangle
@@ -651,52 +1009,110 @@ $$
 \langle f,\varphi\rangle
 $$
 
-만 성립하면 돼.
+가 성립하는 방식으로 방정식을 해석할 수 있다.
 
-미분을 $u$에서 $\varphi$ 쪽으로 넘기면 미분가능성이 부족한 함수도 해로 취급할 수 있어.
+미분을 부분적분을 통해 $u$에서 시험함수 $\varphi$ 쪽으로 옮기면, $u$가 고전적 의미에서 충분히 미분 가능하지 않아도 방정식을 정의할 수 있다.
 
-그래서 Sobolev 공간
+이 관점이 **weak solution**으로 이어진다.
+
+약한 미분을 가진 함수들을 다루기 위해 대표적으로 Sobolev 공간
 
 $$
 W^{k,p}(\Omega)
 $$
 
-이나
+를 사용하고,
 
 $$
 H^k(\Omega)=W^{k,2}(\Omega)
 $$
 
-를 사용하게 돼.
+로 쓴다.
 
 ---
 
-결국 목적과 필요의 연쇄는
+## 8. convolution을 군으로 확장하기
+
+$\mathbb R^n$에서는 두 점의 상대위치를
+
+$$
+x-y
+$$
+
+로 표현했다.
+
+더 일반적으로 국소콤팩트 군 $G$와 Haar 측도 $dg$가 있으면, 함수
+
+$$
+f,k:G\to\mathbb C
+$$
+
+에 대해 convolution을
+
+$$
+(f*k)(x)
+=
+\int_G f(g)k(g^{-1}x)\,dg
+$$
+
+로 정의할 수 있다.
+
+$\mathbb R^n$의 덧셈군에서는
+
+$$
+g^{-1}x=x-g
+$$
+
+이므로 앞에서 사용한
+
+$$
+\int k(x-y)f(y)\,dy
+$$
+
+형태가 다시 나온다.
+
+따라서 convolution의 핵심은 단순히 $x-y$라는 식 자체가 아니라 **대칭군에서 상대위치를 사용해 입력을 합성하는 구조**이다.
+
+---
+
+# 전체 연결
+
+이 글의 흐름을 한 줄로 쓰면
 
 $$
 \boxed{
-\text{coordinates}
-\to
-\text{dual basis}
-\to
-\delta
-\to
-\text{kernel}
-\to
-\text{inverse kernel}
-\to
-\text{Green function}
-\to
-\text{symmetry}
-\to
-\text{convolution}
-\to
-\text{distribution}
-\to
-\text{weak solution}
+\begin{array}{c}
+\text{coordinate extraction by dual basis}\\
+\downarrow\\
+\text{Kronecker delta and identity matrix}\\
+\downarrow\\
+\text{Dirac distribution and continuous index}\\
+\downarrow\\
+\text{matrix }A_{ij}\;\longrightarrow\;\text{kernel }K(x,y)\\
+\downarrow\\
+\text{matrix column }Ae_j\;\longrightarrow\;K(\cdot,y)\\
+\downarrow\\
+\text{inverse matrix / Green matrix}\\
+\downarrow\\
+\text{Green function }G(x,y)\\
+\downarrow\\
+\text{translation invariance}\\
+\downarrow\\
+\text{convolution}\\
+\downarrow\\
+\text{distributional derivative}\\
+\downarrow\\
+\text{weak solution and Sobolev space}
+\end{array}
 }
 $$
 
-라고 보면 돼.
+핵심은 유한차원의 구조를 버리고 새로운 개념으로 넘어가는 것이 아니다.
 
-가장 핵심적인 한 문장으로 줄이면 **“행렬의 열과 역행렬을 연속무한차원으로 옮기면 delta, kernel, Green function이 나오고, 그 과정에서 고전함수로는 부족해져 distribution과 weak solution이 필요해진다”**야.
+- dual basis의 좌표 추출은 연속 index에서 evaluation functional과 Dirac distribution으로 이어지고,
+- 행렬은 kernel로,
+- 행렬의 열은 점입력에 대한 kernel의 반응으로,
+- 역행렬은 inverse operator의 kernel인 Green function으로,
+- 상대 index에만 의존하는 행렬 구조는 translation-invariant convolution으로 이어진다.
+
+함수공간에서는 이 구조를 그대로 유지하려 할 때 Dirac delta나 미분 불가능한 함수가 등장하기 때문에 distribution, distributional derivative, weak solution 같은 추가적인 수학적 구조가 필요해진다.
