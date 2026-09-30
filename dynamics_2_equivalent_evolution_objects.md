@@ -1,22 +1,32 @@
-# 2. 같은 동역학을 다른 수학적 객체에서 표현하기
+# 같은 동역학은 다른 수학적 객체에서 어떻게 나타나는가
 
-이 글의 출발점은 이미 동역학이 정해져 있다는 것이다.
-
-state space $M$ 위에 flow
+앞 글에서 state space $M$과 flow
 
 $$
 \Phi_t:M\to M
 $$
 
-가 주어졌다고 하자.
+를 얻었다.
 
-이 글의 질문은 다음이다.
+이 글에서는 새로운 동역학을 만드는 것이 아니라, 같은 flow가 다른 수학적 객체에 어떻게 작용하는지 본다.
 
-> 같은 flow를 state 자체가 아니라 observable, probability measure, Hamilton--Jacobi function, value function으로 쓰면 무엇이 달라지는가?
+핵심은 다음 세 가지다.
 
-## 1. state의 evolution
+$$
+\boxed{
+\text{state}
+\qquad
+\text{observable}
+\qquad
+\text{probability measure}
+}
+$$
 
-초기 state $x_0\in M$에 대해
+Hamilton--Jacobi function과 value function은 이 공통 흐름에 자동으로 붙는 것이 아니라, 각각 Hamiltonian system과 optimal control problem에서 추가로 생긴다.
+
+## 1. 기준: state의 evolution
+
+initial state $x_0\in M$에 대해
 
 $$
 x_t
@@ -26,16 +36,11 @@ $$
 
 가 state의 evolution이다.
 
-- $M$: state space
-- $\Phi_t:M\to M$: flow
-- $x_0\in M$: initial state
-- $x_t\in M$: time $t$의 state
+이 식이 기준이고 이후의 object들은 모두 이 flow와 연결된다.
 
-이것이 기준이다. 이후의 모든 식은 이 state evolution과 연결된다.
+## 2. state에서 observable로
 
-## 2. observable과 Koopman operator
-
-**observable**은 state에서 값을 읽는 함수
+**observable**은 state에서 값을 읽는 function
 
 $$
 A:M\to\mathbb R
@@ -43,15 +48,15 @@ $$
 
 이다.
 
-state가 $x_0$에서 $\Phi_t(x_0)$로 이동하면 observable의 값은
+state가 $\Phi_t(x)$로 이동했을 때 observable 값은
 
 $$
-A(\Phi_t(x_0))
+A(\Phi_t(x))
 $$
 
-가 된다.
+이다.
 
-이를 함수 자체의 evolution으로 옮기기 위해 **Koopman operator**
+이를 function 자체의 변화로 쓰기 위해 **Koopman operator**
 
 $$
 U_t:\mathcal F(M)\to\mathcal F(M)
@@ -67,10 +72,21 @@ $$
 
 로 정의한다.
 
-- $\mathcal F(M)$: 필요한 regularity를 가진 real-valued observables의 함수공간
-- $U_t$: Koopman operator
+따라서 같은 flow를
 
-flow가 vector field $X$에서 만들어졌다면 smooth observable $A$에 대한 Koopman generator $\mathcal L$은
+$$
+x\mapsto\Phi_t(x)
+$$
+
+로 보거나
+
+$$
+A\mapsto A\circ\Phi_t
+$$
+
+로 볼 수 있다.
+
+flow가 vector field $X$에서 만들어지고 $A$가 smooth하면 Koopman generator $\mathcal L$은
 
 $$
 \mathcal LA
@@ -82,7 +98,7 @@ $$
 
 이다.
 
-유클리드 공간 $M=\mathbb R^n$에서는
+유클리드 공간에서는
 
 $$
 \mathcal LA(x)
@@ -98,19 +114,19 @@ $$
 \{A,H\}
 $$
 
-로 쓸 수 있다.
+가 된다.
 
-## 3. probability measure와 pushforward measure
+## 3. state에서 probability measure로
 
-initial probability measure
+initial state가 하나가 아니라 probability measure
 
 $$
 \mu_0\in\mathcal P(M)
 $$
 
-를 생각한다.
+로 주어졌다고 하자.
 
-flow $\Phi_t$가 measure를 옮긴 결과를 **pushforward measure**
+flow가 measure를 옮긴 결과는 **pushforward measure**
 
 $$
 \mu_t
@@ -118,7 +134,7 @@ $$
 (\Phi_t)_\#\mu_0
 $$
 
-로 정의한다.
+이다.
 
 measurable set $B\subseteq M$에 대해
 
@@ -128,7 +144,7 @@ $$
 \mu_0(\Phi_t^{-1}(B))
 $$
 
-이다.
+로 정의한다.
 
 observable과 probability measure는
 
@@ -140,19 +156,19 @@ $$
 
 로 연결된다.
 
-## 4. continuity equation과 Liouville equation
+즉 state에 작용하는 같은 flow가 observable에는 composition으로, probability measure에는 pushforward로 나타난다.
+
+## 4. density가 존재하면 continuity equation이 된다
 
 $M=\mathbb R^n$이고 $\mu_t$가 smooth density $\rho(t,x)$를 가진다고 하자.
 
 state equation이
 
 $$
-\dot x
-=
-X(x)
+\dot x=X(x)
 $$
 
-이면 density는 **continuity equation**
+이면 density는
 
 $$
 \partial_t\rho
@@ -164,7 +180,9 @@ $$
 
 을 만족한다.
 
-Hamiltonian system의 canonical coordinates $(q,p)$에서는 **Liouville equation**
+이 식이 **continuity equation**이다.
+
+Hamiltonian system에서는 Hamiltonian vector field의 구조 때문에 canonical coordinates에서
 
 $$
 \partial_t\rho
@@ -174,11 +192,25 @@ $$
 0
 $$
 
-으로 쓸 수 있다.
+이라는 **Liouville equation**을 얻는다.
 
-## 5. stochastic process와 Markov semigroup
+여기까지의 연결은 하나다.
 
-Markov process $(X_t)_{t\ge0}$에 대해 observable $A$의 evolution을
+$$
+\boxed{
+\Phi_t
+\longrightarrow
+U_tA=A\circ\Phi_t
+\qquad\text{and}\qquad
+\mu_t=(\Phi_t)_\#\mu_0
+}
+$$
+
+## 5. stochastic dynamics에서는 Markov semigroup이 같은 역할을 한다
+
+확률적 동역학에서는 deterministic flow $\Phi_t$ 대신 transition law를 사용한다.
+
+Markov process $(X_t)_{t\ge0}$에 대해
 
 $$
 (P_tA)(x)
@@ -189,21 +221,17 @@ A(X_t)\mid X_0=x
 \right]
 $$
 
-로 정의한다.
+로 **Markov semigroup**을 정의한다.
 
-조건이 맞으면 $\{P_t\}_{t\ge0}$는 **Markov semigroup**이다.
-
-probability measure는 dual action으로
+observable은 $P_t$로 변하고 probability measure는 dual operator $P_t^*$로
 
 $$
-\mu_t
-=
-P_t^*\mu_0
+\mu_t=P_t^*\mu_0
 $$
 
-로 evolution한다.
+처럼 변한다.
 
-generator를 $\mathcal L$이라 하면 observable은
+generator를 $\mathcal L$이라고 하면
 
 $$
 \partial_t A_t
@@ -211,7 +239,7 @@ $$
 \mathcal L A_t
 $$
 
-형태로, density는
+와
 
 $$
 \partial_t\rho_t
@@ -219,7 +247,7 @@ $$
 \mathcal L^*\rho_t
 $$
 
-형태로 쓴다.
+가 서로 대응한다.
 
 ### Langevin SDE와 Fokker--Planck equation
 
@@ -235,11 +263,7 @@ $$
 
 를 생각하자.
 
-- $U:\mathbb R^d\to\mathbb R$: potential
-- $\beta>0$: parameter
-- $W_t$: $d$-dimensional Brownian motion
-
-generator는 smooth function $A$에 대해
+generator는
 
 $$
 \mathcal LA
@@ -249,9 +273,7 @@ $$
 \beta^{-1}\Delta A
 $$
 
-이다.
-
-density는
+이고 density는
 
 $$
 \partial_t\rho
@@ -263,11 +285,11 @@ $$
 
 를 만족한다.
 
-이것이 Fokker--Planck equation이다.
+앞 글에서는 이 Fokker--Planck equation이 Wasserstein gradient flow로 나왔다. 여기서는 같은 equation을 Langevin SDE의 probability density evolution으로 얻었다.
 
-1번 글에서 같은 PDE가 Wasserstein gradient flow로도 나타났다. 여기서는 그 PDE를 SDE의 probability density evolution으로 읽는다.
+즉 같은 PDE가 서로 다른 출발점에서 연결된다.
 
-## 6. Hamilton--Jacobi equation
+## 6. Hamiltonian system에서는 Hamilton--Jacobi function이 생긴다
 
 Hamiltonian system의 state는
 
@@ -277,25 +299,13 @@ $$
 
 이다.
 
-**Hamilton--Jacobi function**
+smooth function
 
 $$
 S:I\times Q\to\mathbb R
 $$
 
-가 smooth하다고 하자.
-
-각 time $t$에서
-
-$$
-p
-=
-d_qS(t,q)
-$$
-
-를 사용한다.
-
-Hamilton--Jacobi equation은
+가
 
 $$
 \partial_tS(t,q)
@@ -305,7 +315,7 @@ H(q,d_qS(t,q),t)
 0
 $$
 
-이다.
+을 만족하면 이것이 **Hamilton--Jacobi equation**이다.
 
 유클리드 좌표에서는
 
@@ -317,26 +327,27 @@ H(q,\nabla_qS(t,q),t)
 0.
 $$
 
-smooth solution이 존재하고 graph 표현이 유지되는 영역에서 characteristic curve는 Hamilton's equations와 연결된다.
+또
 
-## 7. control problem과 value function
+$$
+p=d_qS(t,q)
+$$
+
+를 통해 $S$의 differential이 momentum을 정한다.
+
+따라서 Hamilton--Jacobi function은 Hamiltonian integral curves의 family를 function 하나로 기술하는 데 사용된다.
+
+## 7. optimal control에서는 value function이 생긴다
 
 control system
 
 $$
-\dot x
-=
-f(x,u,t)
+\dot x=f(x,u,t)
 $$
 
-가 있다고 하자.
+에 running cost $\ell$과 terminal cost $\varphi$를 준다.
 
-- $x(t)\in M$: state
-- $u(t)\in\mathcal U$: control
-- $\ell(x,u,t)$: running cost
-- $\varphi(x)$: terminal cost
-
-cost functional을
+cost functional은
 
 $$
 J_{t,x}[u]
@@ -347,7 +358,7 @@ J_{t,x}[u]
 \varphi(x_T)
 $$
 
-로 정의한다.
+이다.
 
 **value function**
 
@@ -360,8 +371,7 @@ $$
 $$
 V(t,x)
 =
-\inf_{u}
-J_{t,x}[u]
+\inf_u J_{t,x}[u]
 $$
 
 로 정의한다.
@@ -391,7 +401,7 @@ $$
 
 이다.
 
-최소값을 달성하는 control $u^*(t,x)$가 존재하면
+최소값을 달성하는 control이 있으면
 
 $$
 u^*(t,x)
@@ -404,87 +414,51 @@ d_xV[f(x,u,t)]
 \right\}
 $$
 
-으로 optimal feedback을 얻고
+로 optimal feedback을 얻는다.
 
-$$
-\dot x
-=
-f(x,u^*(t,x),t)
-$$
+Hamilton--Jacobi function $S$와 value function $V$는 둘 다 function이지만 같은 수학적 object가 아니다.
 
-에서 optimal state trajectory를 얻는다.
+## 8. 전체 연결
 
-Hamilton--Jacobi function $S$와 value function $V$는 같은 object가 아니다.
-
-## 8. 한 연결로 정리
-
-deterministic ODE
-
-$$
-\dot x=X(x)
-$$
-
-에서 시작하면
-
-$$
-x_t=\Phi_t(x_0)
-$$
-
-이고 observable은
-
-$$
-(U_tA)(x)=A(\Phi_t(x))
-$$
-
-이며 probability measure는
-
-$$
-\mu_t=(\Phi_t)_\#\mu_0
-$$
-
-이다.
-
-smooth density가 존재하면
-
-$$
-\partial_t\rho+\nabla\cdot(\rho X)=0.
-$$
-
-따라서 중심 연결은
+deterministic dynamics에서는
 
 $$
 \boxed{
-\text{state}
-\longrightarrow
-\text{observable}
-\longrightarrow
-\text{probability measure}
-\longrightarrow
-\text{density}
+\begin{array}{c}
+x_t=\Phi_t(x_0)\\
+\downarrow\\
+(U_tA)(x)=A(\Phi_t(x))\\
+\downarrow\\
+\mu_t=(\Phi_t)_\#\mu_0\\
+\downarrow\\
+\partial_t\rho+\nabla\cdot(\rho X)=0
+\end{array}
 }
 $$
 
-이다.
+로 연결된다.
 
-Hamilton--Jacobi function과 value function은 모든 dynamical system에 자동으로 붙는 object가 아니라 각각 Hamiltonian mechanics와 optimal control problem이라는 추가 구조가 있을 때 도입된다.
+확률적 dynamics에서는 $\Phi_t$ 대신 Markov semigroup $P_t$가 observable과 probability measure를 연결한다.
 
-## 9. 다음 글로의 연결
+Hamilton--Jacobi function과 value function은 각각 Hamiltonian system과 optimal control problem에서 추가로 정의된다.
 
-다음 글에서는 Fourier transform, Laplace transform, spectrum, resolvent, semigroup, Lyapunov function, attractor, invariant manifold, moment closure, Mori--Zwanzig, coarse graining, renormalization group을 다룬다.
+다음 글에서는 이렇게 얻은 operator, generator, observable, probability measure를 이용해 spectrum과 mode를 분석하고, 그 분석을 바탕으로 dynamical system을 축약한다.
+
+---
 
 # 정확한 정의와 조건
 
-### Koopman operator
+## Koopman operator
 
-measurable map $\Phi_t:M\to M$와 observable space $\mathcal F(M)$이 composition에 대해 닫혀 있으면
+measurable map $\Phi_t:M\to M$에 대해 composition이 정의되는 function space $\mathcal F(M)$ 위에서
 
 $$
 U_tA=A\circ\Phi_t
 $$
 
-로 Koopman operator를 정의한다.
+로 정의한다.
 
-### pushforward measure
+## pushforward measure
 
 measurable map $F:M\to N$와 measure $\mu$에 대해
 
@@ -496,7 +470,7 @@ $$
 
 로 정의한다.
 
-### Markov semigroup
+## Markov semigroup
 
 operators $\{P_t\}_{t\ge0}$가
 
@@ -506,12 +480,8 @@ P_0=I,
 P_{t+s}=P_tP_s
 $$
 
-를 만족하고 positivity와 constant preservation을 만족할 때 Markov semigroup이라 한다.
+를 만족하고 positivity와 constant preservation을 만족할 때 Markov semigroup이라고 한다.
 
-### HJB equation
+## HJB equation
 
-본문에서는 classical differentiability를 가정했다. 일반적인 optimal control에서는 value function이 differentiable하지 않을 수 있으므로 viscosity solution을 사용한다.
-
-### Hamilton--Jacobi equation
-
-본문에서는 $Q=\mathbb R^n$ 또는 smooth manifold의 한 coordinate chart에서 $S$가 충분히 smooth하고 $d_qS$의 graph가 Hamiltonian flow 아래에서 적절히 유지되는 경우를 사용했다.
+본문에서는 value function이 differentiable한 경우만 썼다. 일반적인 optimal control에서는 viscosity solution을 사용한다.
